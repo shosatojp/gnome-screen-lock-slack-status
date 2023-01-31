@@ -1,0 +1,16 @@
+version: '3'
+services:
+  app:
+    build: .
+    image: ghcr.io/shosatojp/gnome-screen-lock-slack-status
+    environment:
+      DISPLAY: $DISPLAY
+      DOCKER_UID: $DOCKER_UID
+      DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/${DOCKER_UID}/bus
+      SLACK_USER_TOKEN: $SLACK_USER_TOKEN
+      ACTIVE_STATUS_TEXT: 研究室にいます
+      ACTIVE_STATUS_EMOJI: ":school:"
+      INACTIVE_STATUS_TEXT: ""
+      INACTIVE_STATUS_EMOJI: ""
+    volumes:
+      - /run/user/${DOCKER_UID}/bus:/run/user/${DOCKER_UID}/bus
