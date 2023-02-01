@@ -1,5 +1,7 @@
 import os
 import sys
+import signal
+import threading
 import traceback
 
 from gi.repository import GLib
@@ -65,4 +67,15 @@ if __name__ == "__main__":
         sys.exit(1)
 
     loop = GLib.MainLoop()
+
+    def signal_handler():
+        siginfo = signal.sigwaitinfo({signal.SIGTERM, signal.SIGINT})
+        print(siginfo, flush=True)
+
+        handler(islocked=True)
+        loop.quit()
+
+    signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+    threading.Thread(target=signal_handler, daemon=True).start()
+
     loop.run()
